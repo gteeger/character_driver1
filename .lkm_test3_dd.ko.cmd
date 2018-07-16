@@ -1,0 +1,1 @@
+cmd_/root/kernel_testing/lkm_test3_dd.ko := ld -EL -r  -T ./scripts/module-common.lds --build-id  -T ./arch/arm/kernel/module.lds -o /root/kernel_testing/lkm_test3_dd.ko /root/kernel_testing/lkm_test3_dd.o /root/kernel_testing/lkm_test3_dd.mod.o ;  true

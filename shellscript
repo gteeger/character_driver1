@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo insmod lkm_test3_dd.ko
+sudo mknod -m 666 /dev/simple_char_dev c 420 0
+./test
