@@ -1,8 +1,10 @@
-obj-m := lkm_test3_dd.o
+#obj-m := lkm_demo.o
+#obj-m += demo2.o
+obj-m := demo3.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) modules
-	$(CC) US_LKM_TEST.c -o test
+	$(CC) test.c -o test
 clean:
 	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) clean
 	rm test
