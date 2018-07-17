@@ -26,7 +26,7 @@ int main(){
       return errno;
    }
  
-   printf("Press ENTER to read back from the device...\n");
+      printf("Press ENTER to read back from the device...\n");
    getchar();
  
    printf("Reading from the device...\n");
