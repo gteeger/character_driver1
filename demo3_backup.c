@@ -1,4 +1,5 @@
 
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -18,7 +19,7 @@ int (*open) (struct inode *, struct file *);
 #define BUFFER_SIZE 256
 MODULE_LICENSE("GPL");    
 static unsigned int gpioLED = 49;
-//static unsigned int gpioLED2 = 3;
+static unsigned int gpioIn = 117;
 //static unsigned int irqNumber;
 //static irq_handler_t  demo_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
 //static unsigned int irqNumber;   < Used to share the IRQ number within this file
@@ -28,6 +29,9 @@ int lkm_open (struct inode *pinode, struct file *pfile){
 	return 0; //to indicate sucess
 }
 ssize_t lkm_read (struct file *pfile, char __user *buffer, size_t length, loff_t *offset){
+
+unsigned long unRead = 0 ;
+
 #if 0
 	static char device_buffer[BUFFER_SIZE];
 	int bytesRead;
@@ -51,11 +55,12 @@ return bytesRead;
 
 #endif
 
-int device_buffer = 1;
-
+int device_buffer = (int)gpio_get_value(gpioIn);
+//int device_buffer = 1;
 //static char device_buffer[BUFFER_SIZE]; 
-copy_to_user(buffer, (void*)&device_buffer, sizeof(int));
-
+unRead = copy_to_user(buffer, (void*)&device_buffer, sizeof(int));
+	if(unRead)
+		printk(KERN_ALERT "%lu bytes could not be copied\n", unRead);
 
 
 	return sizeof(int); //we are saying the file is empty
@@ -79,7 +84,7 @@ ssize_t lkm_write (struct file *pfile, const char __user *buffer, size_t length,
 	//printk(KERN_INFO "HVACChar: b4 sprintf(): buffer=%c\n", buf_internal[0]);
 	while (buffer_internal[i]!= '\0' ){
 	
-	printk(KERN_INFO "buffer_internalW = %c", buffer_internal[i]);
+	//printk(KERN_INFO "buffer_internalW = %c", buffer_internal[i]);
 		if(buffer_internal[i]=='0') 
 			gpio_set_value(gpioLED, 0);
 		else
@@ -93,7 +98,7 @@ ssize_t lkm_write (struct file *pfile, const char __user *buffer, size_t length,
 int lkm_close (struct inode *pinode, struct file *pfile){
 	printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
 	gpio_set_value(gpioLED, 0);
-//	gpio_set_value(gpioLED2, 1);
+	//gpio_set_value(gpioIn, 0);
 	return 0;
 }
 struct file_operations lkm_file_operations = {
@@ -116,8 +121,11 @@ int lkm_demo_init(void)
 	printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
 	gpio_request(gpioLED, "sysfs");          // gpioLED is hardcoded to 49, request it
 	gpio_direction_output(gpioLED, 0);   // Set the gpio to be in output mode and on
+	gpio_request(gpioIn, "sysfs");          // gpioLED is hardcoded to 49,$
+        gpio_direction_input(gpioIn); 
 	// gpio_set_value(gpioLED, ledOn);          // Not required as set by line above
 	gpio_export(gpioLED, false);             // Causes gpio49 to appear in /sys/class/gpio
+	gpio_export(gpioIn, false);   
 	//irqNumber = gpio_to_irq(gpioButton);
 	//gpio_direction_output(gpioLED, 1);   // Set the gpio to be in output mode and on
 	//gpio_export(gpioLED, false);
@@ -130,7 +138,9 @@ int lkm_demo_init(void)
 }
 void lkm_demo_exit(void)
 {
-	//We must unregister the Char. device driver:
+	
+printk(KERN_ALERT "Inside the %s function!!!!\n", __FUNCTION__);
+//We must unregister the Char. device driver:
 	//gpio_set_value(gpioLED, 0);
 	//gpio_free(gpioLED);
 	unregister_chrdev(421, "Simple Char Drv");
@@ -139,7 +149,10 @@ void lkm_demo_exit(void)
 	//free_irq(irqNumber, NULL);               // Free the IRQ number, no *dev_id required in this case
 	//gpio_unexport(gpioButton);               // Unexport the Button GPIO
 	gpio_free(gpioLED);                      // Free the LED GPIO
-//	gpio_set_value(gpioLED2, 0);              // Turn the LED off, makes it clear the device was unloaded
+       // gpio_set_value(gpioIn, 0);              // Turn the LED off, makes it $
+        gpio_unexport(gpioIn); 
+	gpio_free(gpioIn); 
+//gpio_set_value(gpioLED2, 0);              // Turn the LED off, makes it clear the device was unloaded
 //	gpio_unexport(gpioLED2);                  // Unexport the LED GPIO
 //	gpio_free(gpioLED2);                      // Free the LED GPIO
 	//gpio_free(gpioButton);
