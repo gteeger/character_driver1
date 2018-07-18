@@ -18,9 +18,6 @@ int (*open) (struct inode *, struct file *);
 #define BUFFER_SIZE 256
 MODULE_LICENSE("GPL");    
 static unsigned int gpioLED = 49;
-static char device_buffer[BUFFER_SIZE]; 
-
-
 //static unsigned int gpioLED2 = 3;
 //static unsigned int irqNumber;
 //static irq_handler_t  demo_irq_handler(unsigned int irq, void *dev_id, struct pt_regs *regs);
@@ -32,7 +29,7 @@ int lkm_open (struct inode *pinode, struct file *pfile){
 }
 ssize_t lkm_read (struct file *pfile, char __user *buffer, size_t length, loff_t *offset){
 #if 0
-
+	static char device_buffer[BUFFER_SIZE];
 	int bytesRead;
 	int bytesToRead = BUFFER_SIZE - *offset;
 
@@ -41,7 +38,7 @@ ssize_t lkm_read (struct file *pfile, char __user *buffer, size_t length, loff_t
 		printk(KERN_ALERT "Reached the end of the file");
 		return bytesToRead;
 	}
-
+	
 	// Get bytes read by subtracting return of copy_to_user (returns unread bytes)
 	bytesRead = bytesToRead - copy_to_user(buffer, device_buffer + *offset, bytesToRead);
 	printk(KERN_ALERT "READING with Simple Character Driver. Reading %d bytes\n", bytesRead);
@@ -54,44 +51,17 @@ return bytesRead;
 
 #endif
 
+int device_buffer = 1;
+
 //static char device_buffer[BUFFER_SIZE]; 
-//copy_to_user(buffer, device_buffer, 3);
-	int bytesRead;
-	int bytesToRead = BUFFER_SIZE - *offset;
-	int i = 0;
-	// If we are at the end of the file, STOP READING!
-	if (bytesToRead == 0){
-		printk(KERN_ALERT "Reached the end of the file");
-		return bytesToRead;
-	}
-	// Get bytes read by subtracting return of copy_to_user (returns unread bytes)
-	bytesRead = bytesToRead - copy_to_user(buffer, device_buffer + *offset, bytesToRead);
-	printk(KERN_ALERT "READING with Simple Character Driver. Reading %d bytes\n", bytesRead);
-
-	// Set offset so that we can eventually reach the end of the file
-	*offset += bytesRead;
-
-while (device_buffer[i]!= '\0' ){
-
-        printk(KERN_INFO "buffer_internalR = %c", device_buffer[i]);
-                if(device_buffer[i]=='0') 
-                        gpio_set_value(gpioLED, 0);
-                else
-                        gpio_set_value(gpioLED, 1);
-                i++;
-        }
+copy_to_user(buffer, (void*)&device_buffer, sizeof(int));
 
 
 
-return bytesRead;
-
-
-
+	return sizeof(int); //we are saying the file is empty
 
 }
 ssize_t lkm_write (struct file *pfile, const char __user *buffer, size_t length, loff_t *offset){
-
-#if 0
 	//printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
 	//gpio_set_value(gpioLED, 1);
 	//gpio_set_value(gpioLED2, 0);
@@ -118,25 +88,8 @@ ssize_t lkm_write (struct file *pfile, const char __user *buffer, size_t length,
 	}
 	kfree(buffer_internal);
 	//printk(KERN_ALERT "buff: %s", buffer[3]);
-#endif
-
-int i = 0;
-	copy_from_user(device_buffer, buffer, length);
-while (device_buffer[i]!= '\0' ){
-
-        printk(KERN_INFO "buffer_internalW = %c", device_buffer[i]);
-                if(device_buffer[i]=='0') 
-                        gpio_set_value(gpioLED, 0);
-                else
-                        gpio_set_value(gpioLED, 1);
-                i++;
-        }
-
-
-
 	return length;
 }
-
 int lkm_close (struct inode *pinode, struct file *pfile){
 	printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
 	gpio_set_value(gpioLED, 0);

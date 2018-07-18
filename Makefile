@@ -1,6 +1,6 @@
 #obj-m := lkm_demo.o
 #obj-m += demo2.o
-obj-m := demo3.o
+obj-m := demo3_backup.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) modules

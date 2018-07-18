@@ -1,8 +1,8 @@
-cmd_/root/linux/demo3.mod.o := gcc -Wp,-MD,/root/linux/.demo3.mod.o.d  -nostdinc -isystem /usr/lib/gcc/arm-linux-gnueabihf/6/include -I./arch/arm/include -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./arch/arm/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -fno-PIE -fno-dwarf2-cfi-asm -fno-omit-frame-pointer -mapcs -mno-sched-prolog -fno-ipa-sra -mabi=aapcs-linux -mno-thumb-interwork -mfpu=vfp -funwind-tables -marm -D__LINUX_ARM_ARCH__=7 -march=armv7-a -msoft-float -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -O2 --param=allow-store-data-races=0 -DCC_HAVE_ASM_GOTO -Wframe-larger-than=1024 -fstack-protector-strong -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -pg -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fno-stack-check -fconserve-stack -Werror=implicit-int -Werror=strict-prototypes -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init  -DKBUILD_BASENAME='"demo3.mod"'  -DKBUILD_MODNAME='"demo3"' -DMODULE  -c -o /root/linux/demo3.mod.o /root/linux/demo3.mod.c
+cmd_/root/linux/demo3_backup.mod.o := gcc -Wp,-MD,/root/linux/.demo3_backup.mod.o.d  -nostdinc -isystem /usr/lib/gcc/arm-linux-gnueabihf/6/include -I./arch/arm/include -I./arch/arm/include/generated  -I./include -I./arch/arm/include/uapi -I./arch/arm/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -fno-PIE -fno-dwarf2-cfi-asm -fno-omit-frame-pointer -mapcs -mno-sched-prolog -fno-ipa-sra -mabi=aapcs-linux -mno-thumb-interwork -mfpu=vfp -funwind-tables -marm -D__LINUX_ARM_ARCH__=7 -march=armv7-a -msoft-float -Uarm -fno-delete-null-pointer-checks -Wno-frame-address -O2 --param=allow-store-data-races=0 -DCC_HAVE_ASM_GOTO -Wframe-larger-than=1024 -fstack-protector-strong -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -pg -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-merge-all-constants -fmerge-constants -fno-stack-check -fconserve-stack -Werror=implicit-int -Werror=strict-prototypes -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init  -DKBUILD_BASENAME='"demo3_backup.mod"'  -DKBUILD_MODNAME='"demo3_backup"' -DMODULE  -c -o /root/linux/demo3_backup.mod.o /root/linux/demo3_backup.mod.c
 
-source_/root/linux/demo3.mod.o := /root/linux/demo3.mod.c
+source_/root/linux/demo3_backup.mod.o := /root/linux/demo3_backup.mod.c
 
-deps_/root/linux/demo3.mod.o := \
+deps_/root/linux/demo3_backup.mod.o := \
     $(wildcard include/config/module/unload.h) \
   include/linux/compiler_types.h \
     $(wildcard include/config/enable/must/check.h) \
@@ -469,6 +469,6 @@ deps_/root/linux/demo3.mod.o := \
   include/linux/vermagic.h \
   include/generated/utsrelease.h \
 
-/root/linux/demo3.mod.o: $(deps_/root/linux/demo3.mod.o)
+/root/linux/demo3_backup.mod.o: $(deps_/root/linux/demo3_backup.mod.o)
 
-$(deps_/root/linux/demo3.mod.o):
+$(deps_/root/linux/demo3_backup.mod.o):
