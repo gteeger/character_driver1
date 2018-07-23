@@ -18,16 +18,14 @@ ssize_t lkm_read (struct file *pfile,
                   char __user *buffer,
                   size_t length,
                   loff_t *offset) {
-char out = '0';
-bool gpioPin = gpio_get_value(gpioIn);
-if (gpioPin == 0)
-	out = '0';
-if (gpioPin == 1)
-	out = '1';
+    char out = '0';
+    bool gpioPin = gpio_get_value(gpioIn);
+    if (gpioPin == 1)
+        out = '1';
 
-printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
+    printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
 
-return simple_read_from_buffer(buffer, length, offset, &out, sizeof(char));
+    return simple_read_from_buffer(buffer, length, offset, &out, sizeof(char));
 
 }
 ssize_t lkm_write (struct file *pfile,
