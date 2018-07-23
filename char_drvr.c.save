@@ -9,7 +9,6 @@ MODULE_LICENSE("GPL");
 static unsigned int gpioLED = 49;
 static unsigned int gpioIn = 117;
 
-
 int lkm_open (struct inode *pinode, struct file *pfile) {
     printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
     return 0;
@@ -18,16 +17,21 @@ ssize_t lkm_read (struct file *pfile,
                   char __user *buffer,
                   size_t length,
                   loff_t *offset) {
-char out = '0';
-bool gpioPin = gpio_get_value(gpioIn);
-if (gpioPin == 0)
-	out = '0';
-if (gpioPin == 1)
-	out = '1';
+#if 0   
+    unsigned long unRead = 0 ;
+    int device_buffer = (int)gpio_get_value(gpioIn);
+    unRead = copy_to_user(buffer, (void*)&device_buffer, sizeof(int));
+    if(unRead)
+        printk(KERN_ALERT "%lu bytes could not be copied\n", unRead);
+   // return sizeof(int);
+	if(*pfile > 0) return 0;
+	else return sizeof(int);
+#endif
 
+int device_buffer = (int)gpio_get_value(gpioIn);
 printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
 
-return simple_read_from_buffer(buffer, length, offset, &out, sizeof(char));
+simple_read_from_buffer(buffer, length, offset, &device_buffer, sizeof(int));
 
 }
 ssize_t lkm_write (struct file *pfile,
