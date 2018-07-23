@@ -17,12 +17,21 @@ ssize_t lkm_read (struct file *pfile,
                   char __user *buffer,
                   size_t length,
                   loff_t *offset) {
+#if 0   
     unsigned long unRead = 0 ;
     int device_buffer = (int)gpio_get_value(gpioIn);
     unRead = copy_to_user(buffer, (void*)&device_buffer, sizeof(int));
     if(unRead)
         printk(KERN_ALERT "%lu bytes could not be copied\n", unRead);
-    return sizeof(int);
+   // return sizeof(int);
+	if(*pfile > 0) return 0;
+	else return sizeof(int);
+#endif
+
+int device_buffer = (int)gpio_get_value(gpioIn);
+
+return simple_read_from_buffer(buffer, length, offset, &device_buffer, sizeof(int));
+
 }
 ssize_t lkm_write (struct file *pfile,
                    const char __user *buffer,

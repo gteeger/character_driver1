@@ -1,4 +1,4 @@
 #!/bin/bash
-sudo insmod demo3.ko
+sudo insmod char_drvr.ko
 sudo mknod -m 666 /dev/simple_char_dev c 421 0
 ./test
