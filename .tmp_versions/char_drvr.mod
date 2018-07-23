@@ -1,3 +1,0 @@
-/root/kernel_testing/previous_lkms/beaglebone_char_driver/final_code/character_driver1/char_drvr.ko
-/root/kernel_testing/previous_lkms/beaglebone_char_driver/final_code/character_driver1/char_drvr.o
-
